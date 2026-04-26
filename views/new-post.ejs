@@ -1,0 +1,14 @@
+<%- include('partials/header.ejs') %>
+<div class="container">
+    <h2>Add Car</h2>
+    <form action="/add-car" method="POST">
+        <input type="text" name="make" placeholder="Make" required>
+        <input type="text" name="model" placeholder="Model" required>
+        <input type="number" name="year" placeholder="Year" required>
+        <input type="number" name="price" placeholder="Price" required>
+        <textarea name="description" placeholder="Description"></textarea>
+        <input type="text" name="imageUrl" placeholder="Image URL">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<%- include('partials/footer.ejs') %>

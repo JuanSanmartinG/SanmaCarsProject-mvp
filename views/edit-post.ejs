@@ -1,0 +1,14 @@
+<%- include('partials/header.ejs') %>
+<div class="container">
+    <h2>Edit Car</h2>
+    <form action="/edit/<%= post.id %>" method="POST">
+        <input type="text" name="make" value="<%= post.make %>">
+        <input type="text" name="model" value="<%= post.model %>">
+        <input type="number" name="year" value="<%= post.year %>">
+        <input type="number" name="price" value="<%= post.price %>">
+        <textarea name="description"><%= post.description %></textarea>
+        <input type="text" name="imageUrl" value="<%= post.imageUrl %>">
+        <button type="submit">Update</button>
+    </form>
+</div>
+<%- include('partials/footer.ejs') %>
