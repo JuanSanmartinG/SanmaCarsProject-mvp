@@ -1,33 +1,48 @@
 <%- include('partials/header.ejs') %>
-<div class="container">
     <section class="hero">
         <div class="hero-content">
             <h1>Encuentra tu próximo compañero de ruta</h1>
-            <p>Vehiculos seleccionados con experticia y detalle. Comodidad y seguridad para ti y tu familia en la cudiad ed Bogotá</p>
-            <a href="/new-post" class="btn-primary"> ¡Vender mi carro ahora!</a>
+            <p>Vehiculos seleccionados con experticia y detalle. Comodidad y seguridad para ti y tu familia en la ciudiad ed Bogotá</p
+        </div>
+        <div class="search-wrap">
+            <form action="/" method="GET" class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="search" placeholder="Búsqueda por marca, modelo, año o placa...">
+                <button type="submit"> Buscar</button>
+            </form>
         </div>
     </section>
     <div class="container">
-        <h2 class="section-title">Nuestras ofertas destacadas</h2>
-        <div class="car-grid"></div>
-    </div>
+        <div class="section-header">
+            <h2>Nuestras ofertas destacadas</h2>
+             <p>Encuentra calidad y confianza en cada vehículo</p>
+        </div>
+        <div class="car-grid">
         <% posts.forEach(post => { %>
             <div class="car-card">
-                <div class="image-container">
-                    <img src="<%= post.imageUrl %>" alt="<%=post.make %> <%= post.model %>" class="car-image">
-                    <span class="price-tag">$<%post.price.toLocaleString()%></span>
+                <div class="car-image-container">
+                    <img src="<%= post.image_url %>" alt="<%=post.make %> <%= post.model %>" class="car-image">
                 </div>
                 <div class="car-details">
-                    <h3 class="car-title"> <%post.make %> <%post.model %></h3>
-                    <div class="car-specs">
-                        <span><i class="icon-calendar"></i>Año: <%= post.year %></span>
-                        <span><i class="incon-plate"></i>Placa terminada en: <%= post.plate || 'N/A' %></span>
+                    <h3 class="car-title"> <%= post.make %> <%=post.model %></h3>
+                    <span class="price-tag">$<%= post.price.toLocaleString()%></span>
+                    <div class="specs-container">
+                        <span class="spec-badge"><i class="fa-regular fa-calendar"> </i>Año: <%= post.year %></span>
+                        <span class="spec-badge"><i class="fa-solid fa-car-rear"></i>Placa terminada en: <%= post.plate_ending || 'N/A' %></span>
                     </div>
 
-                    <p class="car-description"> <%= post.description.substring(0, 80) %>...</p>
+                    <p class="car-description"> <%= post.description %></p>
+
                     <div class="card-actions">
-                        <a href="/edit/<%post.id %>" class="btn-edit"> Editar </a>
-                        <a href="">https://wa.me/573000000000?text=Hola! Me interesa el <%= post.make %> <%= post.model %>" class="btn-whatsapp">Me interesa</a>
+
+                        <% if (user) { %>
+                        <a href="/edit/<%= post.id %>" class="btn-edit">Editar</a>
+                        
+                        <form action="/delete/<%= post.id %>" method="POST" style="display: contents;" onsubmit="return confirm('¿Seguro que quieres eliminar este vehículo?');">
+                            <button type="submit" class="btn-delete">Eliminar</button>
+                        </form>
+                        <% } %>
+                        <a href="https://wa.me/573000000000?text=Hola!%20Me%20interesa%20el%20<%= post.make %>%20<%= post.model %>" class="btn-whatsapp">Me interesa</a>
                     </div>
                 </div>
             </div>

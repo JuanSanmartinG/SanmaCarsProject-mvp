@@ -1,14 +1,47 @@
 <%- include('partials/header.ejs') %>
+
 <div class="container">
-    <h2>Edit Car</h2>
-    <form action="/edit/<%= post.id %>" method="POST">
-        <input type="text" name="make" value="<%= post.make %>">
-        <input type="text" name="model" value="<%= post.model %>">
-        <input type="number" name="year" value="<%= post.year %>">
-        <input type="number" name="price" value="<%= post.price %>">
-        <textarea name="description"><%= post.description %></textarea>
-        <input type="text" name="imageUrl" value="<%= post.imageUrl %>">
-        <button type="submit">Update</button>
-    </form>
+    <div class="form-box">
+        <h2>Editar Detalles del Vehículo</h2>
+        <form action="/edit/<%= post.id %>" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Marca</label>
+                <input type="text" name="make" class="form-control" value="<%= post.make %>" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Modelo</label>
+                <input type="text" name="model" class="form-control" value="<%= post.model %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Año</label>
+                <input type="number" name="year" class="form-control" value="<%= post.year %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Precio (COP)</label>
+                <input type="number" name="price" class="form-control" value="<%= post.price %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Último dígito de la placa</label>
+                <input type="text" name="plate" class="form-control" value="<%= post.plate_ending %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Descripción del vehículo</label>
+                <textarea name="description" class="form-control"><%= post.description %></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Fotos del vehiculo</label>
+                <input type="file" id="image" name="image" accept="image/*" class="form-control" value="<%= post.image_url %>">
+            </div>
+
+            <button type="submit" class="btn-primary-form">Guardar Cambios</button>
+        </form>
+    </div>
 </div>
+
 <%- include('partials/footer.ejs') %>

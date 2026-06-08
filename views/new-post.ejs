@@ -1,14 +1,47 @@
 <%- include('partials/header.ejs') %>
+
 <div class="container">
-    <h2>Add Car</h2>
-    <form action="/add-car" method="POST">
-        <input type="text" name="make" placeholder="Make" required>
-        <input type="text" name="model" placeholder="Model" required>
-        <input type="number" name="year" placeholder="Year" required>
-        <input type="number" name="price" placeholder="Price" required>
-        <textarea name="description" placeholder="Description"></textarea>
-        <input type="text" name="imageUrl" placeholder="Image URL">
-        <button type="submit">Submit</button>
-    </form>
+    <div class="form-box">
+        <h2>Vender mi carro</h2>
+        <form action="/add-car" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Marca</label>
+                <input type="text" name="make" class="form-control" placeholder="Ej: Audi" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Modelo</label>
+                <input type="text" name="model" class="form-control" placeholder="Ej: TT Roadster" required>
+            </div>
+
+            <div class="form-group">
+                <label>Año</label>
+                <input type="number" name="year" class="form-control" placeholder="Ej: 2006" required>
+            </div>
+
+            <div class="form-group">
+                <label>Precio (COP)</label>
+                <input type="number" name="price" class="form-control" placeholder="Ej: 80000000" required>
+            </div>
+
+            <div class="form-group">
+                <label>Último dígito de la placa</label>
+                <input type="text" name="plate" class="form-control" placeholder="Ej: 5" required>
+            </div>
+
+            <div class="form-group">
+                <label>Descripción del vehículo</label>
+                <textarea name="description" class="form-control" placeholder="Escribe los detalles destacados..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Fotos del vehículo</label>
+                <input type="file" id="image" name="image" accept="image/*" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn-primary-form">Publicar Vehículo</button>
+        </form>
+    </div>
 </div>
+
 <%- include('partials/footer.ejs') %>
