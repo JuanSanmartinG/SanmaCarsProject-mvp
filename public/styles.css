@@ -53,13 +53,13 @@ body {
    3. NAVIGATION BAR
    ========================================================================== */
 .navbar {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
+    background: var(--white);
     position: sticky;
     top: 0;
     z-index: 1000;
     border-bottom: 1px solid rgba(0,0,0,0.05);
     padding: 15px 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
 }
 
 .nav-container {
