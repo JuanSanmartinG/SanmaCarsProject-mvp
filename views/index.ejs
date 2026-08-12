@@ -2,7 +2,7 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Encuentra tu próximo compañero de ruta</h1>
-            <p>Vehiculos seleccionados con experticia y detalle. Comodidad y seguridad para ti y tu familia en la ciudiad ed Bogotá</p
+            <p>Vehiculos seleccionados con experticia y detalle. Comodidad y seguridad para ti y tu familia en la ciudiad ed Bogotá</p>
         </div>
         <div class="search-wrap">
             <form action="/" method="GET" class="search-bar">
@@ -20,9 +20,25 @@
         <div class="car-grid">
         <% posts.forEach(post => { %>
             <div class="car-card">
-                <div class="car-image-container">
-                    <img src="<%= post.image_url %>" alt="<%=post.make %> <%= post.model %>" class="car-image">
+                <div class="car-gallery-wrapper">
+                <div class="car-image-container car-gallery" id="gallery-<%= post.id %>">
+                    <% if (post.images && post.images.length > 0) { %>
+                        <% post.images.forEach((image, index) => { %>
+                            <img src="<%= image %>" 
+                                alt="<%= post.make %> <%= post.model %>" 
+                                class="car-image" 
+                                data-index="<%= index %>">
+                        <% }); %>
+                    <% } else { %>
+                        <img src="https://images.unsplash.com/photo-1542282088-fe8426682b8f" alt="<%= post.make %> <%= post.model %>" class="car-image">
+                    <% } %>
                 </div>
+
+                <% if (post.images && post.images.length > 1) { %>
+                    <button class="card-arrow card-arrow-prev" onclick="slideCard('<%= post.id %>', -1)" type="button">&#10094;</button>
+                    <button class="card-arrow card-arrow-next" onclick="slideCard('<%= post.id %>', 1)" type="button">&#10095;</button>
+                <% } %>
+            </div>
                 <div class="car-details">
                     <h3 class="car-title"> <%= post.make %> <%=post.model %></h3>
                     <span class="price-tag">$<%= post.price.toLocaleString()%></span>
@@ -49,4 +65,105 @@
         <% }); %>
     </div>
 </div>
+
+<!-- LIGHTBOX ZOOM MODAL -->
+<div id="lightbox" class="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <button class="lightbox-btn lightbox-prev" aria-label="Previous image">&#10094;</button>
+    <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="Vehículo ampliado">
+    </div>
+    <button class="lightbox-btn lightbox-next" aria-label="Next image">&#10095;</button>
+</div>
+
+<script>
+// 1. Function to slide the card gallery on button click
+function slideCard(postId, direction) {
+    const gallery = document.getElementById(`gallery-${postId}`);
+    if (!gallery) return;
+    const scrollAmount = gallery.clientWidth * direction;
+    gallery.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+}
+
+// 2. Reliable Click-to-Zoom Lightbox Handler
+document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector('.lightbox-close');
+    const prevBtn = document.querySelector('.lightbox-prev');
+    const nextBtn = document.querySelector('.lightbox-next');
+
+    let currentImages = [];
+    let currentIndex = 0;
+
+    // Attach click handlers dynamically to all car images
+    document.querySelectorAll('.car-image').forEach((img) => {
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const gallery = img.closest('.car-gallery');
+            if (!gallery) return;
+
+            // Extract image sources directly from sibling tags
+            const siblingImgs = Array.from(gallery.querySelectorAll('.car-image'));
+            currentImages = siblingImgs.map(i => i.src);
+            currentIndex = siblingImgs.indexOf(img);
+
+            if (currentIndex === -1) currentIndex = 0;
+
+            openLightbox();
+        });
+    });
+
+    function openLightbox() {
+        if (!currentImages.length) return;
+        lightboxImg.src = currentImages[currentIndex];
+        lightbox.classList.add('active');
+        updateButtons();
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+    }
+
+    function showPrev() {
+        currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+        lightboxImg.src = currentImages[currentIndex];
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % currentImages.length;
+        lightboxImg.src = currentImages[currentIndex];
+    }
+
+    function updateButtons() {
+        if (currentImages.length <= 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+        }
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', showPrev);
+    if (nextBtn) nextBtn.addEventListener('click', showNext);
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
+                closeLightbox();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox || !lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
+    });
+});
+</script>
+
 <%- include('partials/footer.ejs') %>
